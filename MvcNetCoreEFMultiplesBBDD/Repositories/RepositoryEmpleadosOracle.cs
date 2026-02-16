@@ -56,5 +56,20 @@ AS
                 .FromSqlRaw(sql, pamCursor);
             return await consulta.ToListAsync();
         }
+
+        public async Task InsertEmpleadoAsync(string apellido, string oficio, int dir, int salario, int comision, string nombreDept)
+        {
+            string sql = "BEGIN SP_CREATE_EMPLEADO(:P_APELLIDO, :P_OFICIO, :P_DIR, :P_SALARIO, :P_COMISION, :P_DNOMBRE); END;";
+
+            var pApellido = new OracleParameter("P_APELLIDO", apellido);
+            var pOficio = new OracleParameter("P_OFICIO", oficio);
+            var pDir = new OracleParameter("P_DIR", dir);
+            var pSalario = new OracleParameter("P_SALARIO", salario);
+            var pComision = new OracleParameter("P_COMISION", comision);
+            var pNombreDept = new OracleParameter("P_DNOMBRE", nombreDept);
+
+            await this.context.Database.ExecuteSqlRawAsync(sql, pApellido, pOficio, pDir, pSalario, pComision, pNombreDept);
+        }
+
     }
 }

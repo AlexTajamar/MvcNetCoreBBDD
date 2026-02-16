@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MvcNetCoreEFMultiplesBBDD.Data;
 using MvcNetCoreEFMultiplesBBDD.Models;
 
@@ -18,6 +19,16 @@ as
 	select * from V_EMPLEADOSV2
 go
  */
+
+//DELIMITER //
+
+//CREATE PROCEDURE SP_ALL_VEMPLEADOS()
+//BEGIN
+//    SELECT * FROM V_EMPLEADOSV2;
+//END //
+
+//DELIMITER;
+
 #endregion
 namespace MvcNetCoreEFMultiplesBBDD.Repositories
 {
@@ -47,5 +58,20 @@ namespace MvcNetCoreEFMultiplesBBDD.Repositories
                            select datos;
             return await consulta.FirstOrDefaultAsync();
         }
+        public async Task InsertEmpleadoAsync(string apellido, string oficio, int dir, int salario, int comision, string nombreDept)
+        {
+
+                 
+            string sql = "SP_CREATE_EMPLEADO @APELLIDO, @OFICIO, @DIR, @SALARIO, @COMISION, @DNOMBRE";
+            SqlParameter pApellido = new SqlParameter("@APELLIDO", apellido);
+            SqlParameter pOficio = new SqlParameter("@OFICIO", oficio);
+            SqlParameter pDir = new SqlParameter("@DIR", dir);
+            SqlParameter pSalario = new SqlParameter("@SALARIO", salario);
+            SqlParameter pComision = new SqlParameter("@COMISION", comision);
+            SqlParameter pNombreDept = new SqlParameter("@DNOMBRE", nombreDept);
+            
+            await this.context.Database.ExecuteSqlRawAsync(sql, pApellido, pOficio, pDir, pSalario, pComision, pNombreDept);
+        }
+
     }
 }

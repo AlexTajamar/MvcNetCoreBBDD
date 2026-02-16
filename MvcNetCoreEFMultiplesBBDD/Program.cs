@@ -9,13 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //string conecctionString = builder.Configuration.GetConnectionString("SqlHospital");
-string conecctionString = builder.Configuration.GetConnectionString("OracleHospital");
+string conecctionString = builder.Configuration.GetConnectionString("SqlHospital");
 //builder.Services.AddDbContext<EmpleadosContext>
 //    (options => options.UseSqlServer(conecctionString));
 builder.Services.AddDbContext<EmpleadosContext>
-    (options => options.UseOracle(conecctionString));
+    (options => options.UseSqlServer(conecctionString));
 //builder.Services.AddTransient<IRepositoryEmpleados,RepositoryEmpleadosSQLServer>();
-builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleadosOracle>();
+builder.Services.AddTransient<IRepositoryEmpleados, RepositoryEmpleadosSQLServer>();
 
 var app = builder.Build();
 
